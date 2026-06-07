@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NW Pulse — the hyperlocal data engine</title>
+<meta name="description" content="NW Pulse: a single hyperlocal real-estate data service ingesting four NWMLS-fed markets daily. Built and operated by broker Adrian Willanger." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site">
+  <div class="container site__inner">
+    <a href="#top" class="brand" aria-label="NW Pulse — home">
+      <svg class="brand__mark" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="1.4" fill="none" />
+        <path class="brand__pulse" d="M5 20 L13 20 L16 12 L20 28 L24 16 L28 20 L35 20" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__name">NW Pulse</span>
+        <span class="brand__role">Hyperlocal data engine · NWMLS-clean by default</span>
+      </span>
+    </a>
+    <nav class="nav__links">
+      <a href="#why">Why</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#api">API</a>
+      <a href="#powers">What it powers</a>
+      <a href="#compliance">Compliance</a>
+      <a href="#operator">Operator</a>
+      <a href="#contact" class="nav__cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero container">
+  <p class="kicker">A service. Not a subscription.</p>
+  <h1 class="hero__title">
+    NW <span class="hero__pulse-word">Pulse</span>.
+  </h1>
+  <p class="hero__sub">
+    A single hyperlocal real-estate data engine that ingests <strong>four NWMLS-fed markets</strong>
+    every day and powers the dashboards, briefs, and social exports a working broker actually uses.
+    Built and operated by the broker who reads the numbers — not bought off the shelf.
+  </p>
+
+  <div class="hero__stats">
+    <div class="stat">
+      <div class="stat__num">4</div>
+      <div class="stat__label">Markets ingested</div>
+      <div class="stat__sub">98115 · 98125 · 98155 · 83864</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num">4×</div>
+      <div class="stat__label">Listing types · daily</div>
+      <div class="stat__sub">new · sold · price-changed · pending</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num"><code>X-Api-Key</code></div>
+      <div class="stat__label">Auth on <code>/api/*</code></div>
+      <div class="stat__sub"><code>/api/health</code> public</div>
+    </div>
+    <div class="stat">
+      <div class="stat__num">100%</div>
+      <div class="stat__label">NWMLS-compliant</div>
+      <div class="stat__sub">Aggregate-only social export</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY ============ -->
+<section class="why container" id="why">
+  <p class="kicker kicker--accent">Why I built it</p>
+  <div class="why__grid">
+    <div class="why__col">
+      <h2 class="why__title">Off-the-shelf tools ship confident answers that are quietly wrong.</h2>
+      <p class="why__body">
+        I used Altos. I used the popular brokerage portals. Every one of them was good enough
+        to mislead at the neighborhood scale: comps drawn by ZIP across a school-boundary
+        line, condo estimates that forgot HOA dues, descriptions that sounded like steering.
+        At <em>my</em> scale — Wedgwood vs. Maple Leaf, Pinehurst vs. Lake City — they
+        weren't precise enough to publish.
+      </p>
+    </div>
+    <div class="why__col">
+      <h2 class="why__title">So the pipeline and the judgment ship together.</h2>
+      <p class="why__body">
+        NW Pulse is the engine I built to feed every dashboard, every public brief, and every
+        social export I send. It's NWMLS-clean by default — aggregate-only on anything that
+        leaves my workspace. And it's wired so the broker reading the numbers is the same
+        person who runs the ingest. The judgment ships with the data.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARCHITECTURE ============ -->
+<section class="arch" id="architecture" aria-labelledby="arch-h">
+  <div class="container">
+    <p class="kicker kicker--accent">Architecture</p>
+    <h2 class="arch__title" id="arch-h">One service. Three roles.</h2>
+    <p class="arch__lede">
+      Sources upstream. Engine in the middle. Consumers downstream. Every box is operated
+      by the same person — there is no team between the broker and the bug.
+    </p>
+
+    <div class="arch__diagram" role="img" aria-label="NW Pulse architecture diagram: NWMLS feeds for four markets flow into the ingest layer, then into the data model, then through an X-Api-Key authenticated API, into dashboards and social exports.">
+      <!-- Row 1: Sources -->
+      <div class="arch__row arch__row--src">
+        <div class="arch__rowlabel">Sources · upstream</div>
+        <div class="arch__row-inner">
+          <div class="arch__card arch__card--src">
+            <p class="arch__cardlabel">NWMLS feeds</p>
+            <ul class="arch__chips">
+              <li>98115</li><li>98125</li><li>98155</li><li>83864</li>
+            </ul>
+            <p class="arch__cardfoot">new · sold · price-changed · pending</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch__connector" aria-hidden="true">
+        <div class="arch__connector-line"></div>
+        <div class="arch__connector-arrow">▼</div>
+      </div>
+
+      <!-- Row 2: Engine -->
+      <div class="arch__row arch__row--core">
+        <div class="arch__rowlabel arch__rowlabel--core">NW Pulse · the engine</div>
+        <div class="arch__row-inner arch__row-inner--triple">
+          <div class="arch__card arch__card--core">
+            <p class="arch__cardlabel">Daily batch ingest</p>
+            <p class="arch__cardbody">Pull, dedupe, normalize. Neighborhood-aware geocoding — not just ZIP centroids.</p>
+          </div>
+          <div class="arch__card arch__card--core">
+            <p class="arch__cardlabel">Data model</p>
+            <p class="arch__cardbody">Listing → Property → Neighborhood. Status history preserved. NWMLS field nuances respected.</p>
+          </div>
+          <div class="arch__card arch__card--core">
+            <p class="arch__cardlabel">API layer</p>
+            <p class="arch__cardbody"><code>X-Api-Key</code> on every <code>/api/*</code> route. <code>/api/health</code> is the only public endpoint.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch__connector" aria-hidden="true">
+        <div class="arch__connector-line"></div>
+        <div class="arch__connector-arrow">▼</div>
+      </div>
+
+      <!-- Row 3: Consumers -->
+      <div class="arch__row arch__row--out">
+        <div class="arch__rowlabel">Consumers · downstream</div>
+        <div class="arch__row-inner arch__row-inner--quad">
+          <div class="arch__card arch__card--out">
+            <p class="arch__cardlabel">ZIP dashboards</p>
+            <p class="arch__cardbody">Featured + 98125 Pulse</p>
+          </div>
+          <div class="arch__card arch__card--out">
+            <p class="arch__cardlabel">Daily Hot Sheet</p>
+            <p class="arch__cardbody">NWMLS new + changed</p>
+          </div>
+          <div class="arch__card arch__card--out">
+            <p class="arch__cardlabel">98125 Home Value</p>
+            <p class="arch__cardbody">Single-address lookup</p>
+          </div>
+          <div class="arch__card arch__card--out">
+            <p class="arch__cardlabel">n8n cross-posting</p>
+            <p class="arch__cardbody">Aggregate-only social</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ API ============ -->
+<section class="api container" id="api">
+  <p class="kicker kicker--accent">API surface</p>
+  <h2 class="api__title">A small, opinionated set of endpoints.</h2>
+  <p class="api__lede">
+    Every route is authenticated except health. Responses are JSON, paginated where
+    appropriate, and shaped for the consumers I actually run — not a generic data platform.
+  </p>
+
+  <div class="api__table" role="table" aria-label="NW Pulse API endpoints">
+    <div class="api__row api__row--head" role="row">
+      <div role="columnheader">Endpoint</div>
+      <div role="columnheader">Auth</div>
+      <div role="columnheader">Purpose</div>
+    </div>
+
+    <div class="api__row" role="row">
+      <div role="cell"><code class="api__path">GET /api/health</code></div>
+      <div role="cell"><span class="api__tag api__tag--pub">public</span></div>
+      <div role="cell">Liveness probe — used by n8n schedules and uptime checks.</div>
+    </div>
+
+    <div class="api__row" role="row">
+      <div role="cell"><code class="api__path">GET /api/listings</code></div>
+      <div role="cell"><span class="api__tag">X-Api-Key</span></div>
+      <div role="cell">Current listings for a market with status, list-to-sale, and DOM.</div>
+    </div>
+
+    <div class="api__row" role="row">
+      <div role="cell"><code class="api__path">GET /api/listings/changes</code></div>
+      <div role="cell"><span class="api__tag">X-Api-Key</span></div>
+      <div role="cell">New, price-changed, pending, sold — last N days, per market.</div>
+    </div>
+
+    <div class="api__row" role="row">
+      <div role="cell"><code class="api__path">GET /api/snapshot</code></div>
+      <div role="cell"><span class="api__tag">X-Api-Key</span></div>
+      <div role="cell">Pre-computed KPIs (temperature, stickiness, median DOM) for a market.</div>
+    </div>
+
+    <div class="api__row" role="row">
+      <div role="cell"><code class="api__path">GET /api/social-export</code></div>
+      <div role="cell"><span class="api__tag api__tag--strict">X-Api-Key · aggregate-only</span></div>
+      <div role="cell">NWMLS-compliant payload: counts and medians, no per-listing PII.</div>
+    </div>
+  </div>
+
+  <details class="api__sample">
+    <summary>Sample response — <code>/api/snapshot?market=98125</code></summary>
+<pre class="api__code"><code>{
+  "market": "98125",
+  "as_of": "2026-06-07",
+  "active_count": 38,
+  "median_list_to_sale": 1.024,
+  "median_dom_sold": 9,
+  "reductions_30d": 0.21,
+  "temperature": "warm-on-prepped",
+  "brokers_read": "Lift is concentrated in well-prepped Lake City/Pinehurst homes priced just under round-number thresholds."
+}</code></pre>
+  </details>
+</section>
+
+<!-- ============ WHAT IT POWERS ============ -->
+<section class="powers" id="powers">
+  <div class="container">
+    <p class="kicker kicker--accent">What it powers</p>
+    <h2 class="powers__title">Same engine. Different shapes.</h2>
+    <p class="powers__lede">
+      Every public surface that carries my name is downstream of NW Pulse.
+      Numbers stay consistent across the website, the dashboards, and the social posts
+      because they all read from the same source of truth.
+    </p>
+
+    <ul class="powers__grid">
+      <li class="powers__card">
+        <span class="powers__tag">Daily</span>
+        <h3 class="powers__cardtitle">Featured ZIPs · 98115 · 98125 · 98155</h3>
+        <p class="powers__cardbody">Cross-zip insight dashboard with KPIs, Broker's Read, and methodology footer.</p>
+        <a href="https://www.perplexity.ai/computer/a/ne-seattle-dashboards-lean-8sNWnofpQTiLJm2j.czFrA" class="powers__link" target="_blank" rel="noopener">Open dashboard <span aria-hidden="true">↗</span></a>
+      </li>
+      <li class="powers__card">
+        <span class="powers__tag">Seasonal</span>
+        <h3 class="powers__cardtitle">98125 Market Pulse</h3>
+        <p class="powers__cardbody">Single-zip seasonal view of 98125 — home buyer trends, list-to-sale, seasonality.</p>
+        <a href="https://www.perplexity.ai/computer/a/ne-seattle-dashboards-lean-8sNWnofpQTiLJm2j.czFrA" class="powers__link" target="_blank" rel="noopener">Open dashboard <span aria-hidden="true">↗</span></a>
+      </li>
+      <li class="powers__card">
+        <span class="powers__tag">Public</span>
+        <h3 class="powers__cardtitle">HomeBuyerTrends98125</h3>
+        <p class="powers__cardbody">Public GitHub Pages site that consumes the same NW Pulse snapshot.</p>
+        <a href="https://adrianwillanger-cyber.github.io/HomeBuyerTrends98125/" class="powers__link" target="_blank" rel="noopener">Open site <span aria-hidden="true">↗</span></a>
+      </li>
+      <li class="powers__card">
+        <span class="powers__tag">Positioning</span>
+        <h3 class="powers__cardtitle">Domain Expert × Proptech Engine</h3>
+        <p class="powers__cardbody">The positioning site — NW Pulse is the engine strip that proves the proptech side.</p>
+        <a href="https://www.perplexity.ai/computer/a/adrian-willanger-domain-expert-bOz.8ZqyQLOhxYFIMkt9fQ" class="powers__link" target="_blank" rel="noopener">Open site <span aria-hidden="true">↗</span></a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ COMPLIANCE ============ -->
+<section class="compliance container" id="compliance">
+  <p class="kicker kicker--accent">Compliance posture</p>
+  <h2 class="compliance__title">NWMLS-clean by default.</h2>
+  <p class="compliance__lede">
+    Anything that leaves the workspace is aggregate-only. Per-listing detail stays behind the
+    X-Api-Key wall. The conservative posture is the default — not something I have to remember.
+  </p>
+
+  <div class="compliance__grid">
+    <div class="compliance__col compliance__col--yes">
+      <p class="compliance__head">What ships publicly</p>
+      <ul class="compliance__list">
+        <li>Counts &amp; medians per ZIP</li>
+        <li>Trend lines on aggregate metrics</li>
+        <li>Pre-computed Broker's Read commentary</li>
+        <li>Cross-zip comparisons at the ZIP level</li>
+      </ul>
+    </div>
+    <div class="compliance__col compliance__col--no">
+      <p class="compliance__head">What stays gated</p>
+      <ul class="compliance__list">
+        <li>Per-listing addresses &amp; MLS numbers</li>
+        <li>Seller/agent contact information</li>
+        <li>Raw NWMLS field exports</li>
+        <li>Anything that requires a paid NWMLS license downstream</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERATOR ============ -->
+<section class="operator" id="operator">
+  <div class="container operator__inner">
+    <div class="operator__copy">
+      <p class="kicker">The operator</p>
+      <h2 class="operator__title">Not a vendor. The broker.</h2>
+      <p class="operator__body">
+        I am <strong>Adrian Willanger</strong> — a real estate broker at Kelly Right Real Estate
+        in Seattle. Thirty-plus years in the business. LEED AP. MBA Sustainability. The same
+        person who reads the numbers also runs the ingest. When something looks wrong on a
+        dashboard, the fix is one workspace away — not a support ticket to a vendor in another
+        timezone.
+      </p>
+      <p class="operator__body">
+        NW Pulse exists because I needed it. If it ends up useful to another working broker
+        or to a proptech team that wants to see how a domain expert builds infrastructure,
+        that is a welcome side effect — but the product is the broker. The engine is the proof.
+      </p>
+    </div>
+    <aside class="operator__card">
+      <div class="operator__logo" aria-hidden="true">A</div>
+      <p class="operator__name">Adrian Willanger</p>
+      <p class="operator__role">Broker · Kelly Right Real Estate · Seattle</p>
+      <ul class="operator__facts">
+        <li>30+ years brokering</li>
+        <li>LEED AP · MBA Sustainability</li>
+        <li>NE Seattle · Sandpoint specialist</li>
+        <li>Domain Expert × Proptech Engine</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact container" id="contact">
+  <p class="kicker kicker--accent">Get in touch</p>
+  <h2 class="contact__title">Talk to the operator.</h2>
+  <p class="contact__lede">
+    If you are a working broker, a proptech team, or a journalist trying to understand
+    why hyperlocal data looks different when a broker runs the pipeline — reach out.
+  </p>
+  <div class="contact__lines">
+    <a class="contact__line" href="mailto:Adrian@adrianwillanger.com">Adrian@adrianwillanger.com</a>
+    <a class="contact__line" href="tel:+12069097536">206 909-7536</a>
+    <a class="contact__line" href="https://www.perplexity.ai/computer/a/adrian-willanger-domain-expert-bOz.8ZqyQLOhxYFIMkt9fQ" target="_blank" rel="noopener">Positioning site ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <span>© 2026 Adrian Willanger · Kelly Right Real Estate · Seattle</span>
+    <span>NW Pulse · NWMLS-compliant by default</span>
+  </div>
+</footer>
+
+</body>
+</html>
